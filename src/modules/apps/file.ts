@@ -32,7 +32,8 @@ export const getIgnoredPaths = (root: string): string[] => {
       .split('\n')
       .map(p => p.trim())
       .filter(p => p !== '')
-      .map(p => p.replace(/\/$/, '/**')).concat(defaultIgnored)
+      .map(p => p.replace(/\/$/, '/**'))
+      .concat(defaultIgnored)
   } catch (e) {
     return defaultIgnored
   }
