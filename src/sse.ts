@@ -49,7 +49,9 @@ const parseKeyToQueryParameter = (keys: string[]): string => {
 }
 
 export const withId = (id: string, router: boolean, callback: Function) => (msg: Message) => {
-  if ((id && msg.subject.startsWith(id)) || (router && msg.subject.startsWith('-'))) {
+  if ((id && msg.subject.startsWith(id)) ||
+      (id && msg.body.subject && msg.body.subject.startsWith(id)) ||
+      (router && msg.subject.startsWith('-'))) {
     callback(msg)
   }
 }
