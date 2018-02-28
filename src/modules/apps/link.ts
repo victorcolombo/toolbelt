@@ -5,6 +5,7 @@ import {readFileSync} from 'fs'
 import * as moment from 'moment'
 import {resolve, sep} from 'path'
 import {map} from 'ramda'
+// import eslint from 'eslint'
 
 import {createInterface} from 'readline'
 import log from '../../logger'
@@ -19,6 +20,10 @@ import {getAccount, getWorkspace} from '../../conf'
 import {formatNano} from '../utils'
 import {listenBuild} from '../build'
 import legacyLink from './legacyLink'
+
+const Linter = require('eslint').Linter
+const linter = new Linter()
+linter.verify('var foo;')
 
 const root = process.cwd()
 const DELETE_SIGN = chalk.red('D')
@@ -107,7 +112,20 @@ export default async (options) => {
     const filesWithContent = map(pathToFileObject(root), paths)
 
     log.debug('Sending files:')
+
     paths.forEach(p => log.debug(p))
+
+
+    // console.log(readFileSync(resolve(root, paths[0])).toString())
+    // messages = linter.verify(Buffer.from(file, ''))
+    // console.log('ESLINT ERROR: ', messages)
+
+    // paths.forEach(p => {
+    //   if (p.endsWith('.js')) {
+    //     console.l
+    //   }
+    // })
+
     log.info(`Sending ${paths.length} file` + (paths.length > 1 ? 's' : ''))
 
     const {code} = await builder.linkApp(appId, filesWithContent)
