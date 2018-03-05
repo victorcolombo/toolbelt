@@ -1,6 +1,5 @@
 import {join} from 'path'
 import * as chalk from 'chalk'
-import * as Bluebird from 'bluebird'
 import * as inquirer from 'inquirer'
 import {createReadStream} from 'fs-extra'
 import * as semverDiff from 'semver-diff'
@@ -82,22 +81,22 @@ export const handleError = curry((app: string, err: any) => {
   return Promise.reject(err)
 })
 
-export const appsLatestVersion = (app: string): Bluebird<string | never> => {
+export const appsLatestVersion = (app: string): Promise<string | never> => {
   return createClients({account: 'smartcheckout'}).registry
     .listVersionsByApp(app)
     .then<RegistryAppVersionsListItem[]>(prop('data'))
-    .then(map(extractVersionFromId))
-    .then(pickLatestVersion)
+    .then<string[]>(map(extractVersionFromId))
+    .then<string>(pickLatestVersion)
     .then(wildVersionByMajor)
     .catch(handleError(app))
 }
 
-export const appsLastVersion = (app: string): Bluebird<string | never> => {
+export const appsLastVersion = (app: string): Promise<string | never> => {
   return createClients({account: 'smartcheckout'}).registry
     .listVersionsByApp(app)
     .then<RegistryAppVersionsListItem[]>(prop('data'))
-    .then(map(extractVersionFromId))
-    .then(pickLatestVersion)
+    .then<string[]>(map(extractVersionFromId))
+    .then<string>(pickLatestVersion)
     .catch(handleError(app))
 }
 
