@@ -1,5 +1,5 @@
 import {join} from 'path'
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import * as inquirer from 'inquirer'
 import {createReadStream} from 'fs-extra'
 import * as semverDiff from 'semver-diff'

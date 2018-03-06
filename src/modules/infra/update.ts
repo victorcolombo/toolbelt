@@ -1,7 +1,7 @@
 import * as pad from 'pad'
 import {prop} from 'ramda'
 import * as ora from 'ora'
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import * as semver from 'semver'
 import * as inquirer from 'inquirer'
 import * as Bluebird from 'bluebird'

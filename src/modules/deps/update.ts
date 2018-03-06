@@ -1,5 +1,5 @@
 import {diffJson} from 'diff'
-import * as chalk from 'chalk'
+import chalk from 'chalk'
 import {map, keys, compose, prepend} from 'ramda'
 
 import log from '../../logger'
