@@ -61,7 +61,7 @@ const watchAndSendChanges = (appId: string, builder: Builder): Promise<any> => {
   const sendChanges = debounce(() => {
     builder.relinkApp(appId, changeQueue.splice(0, changeQueue.length))
       .catch(onInitialLinkRequired)
-  }, 10)
+  }, 300)
 
   const watcher = chokidar.watch(['*/**', 'manifest.json', 'policies.json'], {
     atomic: true,
