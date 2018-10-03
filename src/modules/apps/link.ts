@@ -71,8 +71,6 @@ const watchAndSendChanges = (appId: string, builder: Builder): Promise<any> => {
     cwd: root,
     ignoreInitial: true,
     ignored: getIgnoredPaths(root),
-    persistent: true,
-    usePolling: true,
   })
   return new Promise((resolve, reject) => {
     watcher
