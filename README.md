@@ -2,7 +2,7 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/vtex/toolbelt.svg)](https://greenkeeper.io/)
 
-[![Build Status](https://travis-ci.org/vtex/toolbelt.svg?branch=master)](https://travis-ci.org/vtex/toolbelt)
+[![Build Status](https://travis-ci.org/vtex/toolbelt.svg?branch=master)](https://travis-ci.org/vtex/toolbelt) [![Greenkeeper badge](https://badges.greenkeeper.io/vtex/toolbelt.svg?token=8973a851482eec178fcd673378a7e2e5ba83cf56a04badf4b9cc9180b85b712b&ts=1540859032249)](https://greenkeeper.io/)
 
 All you need to start using the VTEX platform.
 
