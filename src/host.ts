@@ -67,7 +67,7 @@ export const getMostAvailableHost = async (
   const { hostname, score, stickyHint } = highestAvailability(availabilityArray)
 
   stickyHint
-    ? log.debug(`Selected host ${hostname} with availability score ${score}`)
+    ? log.info(`Selected host ${hostname} with availability score ${score}`)
     : log.debug(`Unable to select host a priori, will use default options`)
 
   return stickyHint
