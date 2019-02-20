@@ -11,7 +11,7 @@ const isSupportRole = (role: string): boolean => role && role.startsWith('vtex.s
 const isSupportSession = (): boolean => {
   const token = conf.getToken()
   const decoded = jwt.decode(token)
-  if (!decoded) {
+  if (!decoded || typeof decoded === 'string') {
     return false
   }
 
