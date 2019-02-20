@@ -36,6 +36,7 @@ const builderHubTypingsInfoTimeout = 2000  // 2 seconds
 const typingsPath = 'public/_types'
 const yarnPath = require.resolve('yarn/bin/yarn')
 const typingsURLRegex = /_v\/\w*\/typings/
+const getVendor = (appId: string) => appId.split('.')[0]
 
 const resolvePackageJsonPath = (builder: string) => resolvePath(process.cwd(), `${builder}/package.json`)
 
@@ -47,20 +48,45 @@ const typingsInfo = async (workspace: string, account: string) => {
       'Authorization': getToken(),
     },
   })
-  try {
+
+  const retryOpts = {
+    retries: 2,
+    minTimeout: 1000,
+    factor: 2,
+  }
+
+  const getTypingsInfo = async (_: any, tryCount: number) => {
+    if (tryCount > 1) {
+      log.info(`Retrying...${tryCount-1}`)
+    }
+    try {
     const res = await http.get(`/_v/builder/0/typings`)
     return res.data.typingsInfo
+    } catch (err) {
+      const statusMessage = err.response.status ?
+        `: Status ${err.response.status}` : ''
+      log.error(`Error fetching typings info ${statusMessage} (try: ${tryCount})`)
+      throw err
+    }
+  }
+
+  try {
+    return retry(getTypingsInfo, retryOpts)
   } catch (e) {
     log.error('Unable to get typings info from vtex.builder-hub.')
     return {}
   }
+
 }
 
 const appTypingsURL = async (account: string, workspace: string, environment: string, appName: string, appVersion: string, builder: string): Promise<string> => {
   const extension = (environment === 'prod') ? 'myvtex' : 'myvtexdev'
   const appId = await resolveAppId(appName, appVersion)
-  const assetServerPath = isLinked({'version': appId}) ? 'private/typings/linked/v1' : 'public/typings/v1'
-  return `https://${workspace}--${account}.${extension}.com/_v/${assetServerPath}/${appId}/${typingsPath}/${builder}`
+  const vendor = getVendor(appId)
+  if (isLinked({'version': appId})) {
+  return `https://${workspace}--${account}.${extension}.com/_v/private/typings/linked/v1/${appId}/${typingsPath}/${builder}`
+  }
+  return `https://${vendor}.vteximg.com/_v/public/typings/v1/${appId}/${typingsPath}/${builder}`
 }
 
 const appsWithTypingsURLs = async (builder: string, account: string, workspace: string, environment: string, appDependencies: Record<string, any>) => {
@@ -303,9 +329,7 @@ export default async (options) => {
 
   const appId = toAppLocator(manifest)
   const context = { account: getAccount(), workspace: getWorkspace(), environment: getEnvironment() }
-  if (options.install || options.i) {
-    await getTypings(manifest, context.account, context.workspace, context.environment)
-  }
+  await getTypings(manifest, context.account, context.workspace, context.environment)
   const { builder } = createClients(context, { timeout: 60000 })
 
   if (options.c || options.clean) {
