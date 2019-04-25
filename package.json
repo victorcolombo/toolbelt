@@ -1,5 +1,5 @@
 {
-  "name": "vtex",
+  "name": "@victorcolombo/tjwsbfnhsn",
   "version": "2.55.0",
   "description": "The platform for e-commerce apps",
   "main": "lib/index.js",
@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/vtex/toolbelt.git"
+    "url": "git://github.com/victorcolombo/toolbelt.git"
   },
   "keywords": [
     "CLI",
@@ -43,7 +43,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vtex/toolbelt/issues"
+    "url": "https://github.com/victorcolombo/toolbelt/issues"
   },
   "dependencies": {
     "@vtex/api": "^3.4.0",
