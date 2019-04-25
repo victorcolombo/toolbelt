@@ -277,7 +277,11 @@ const performInitialLink = async (appId: string, builder: Builder, extraData : {
     const stickyHint = await getMostAvailableHost(appId, builder, N_HOSTS, AVAILABILITY_TIMEOUT)
     const linkOptions = { sticky: true, stickyHint }
     try {
-      const { code } = await builder.linkApp(appId, filesWithContent, linkOptions, { tsErrorsAsWarnings: unsafe })
+      const linkRequestParams = {
+        tsErrorsAsWarnings: unsafe,
+        targetWorkspace: getWorkspace()
+      }
+      const { code } = await builder.linkApp(appId, filesWithContent, linkOptions, linkRequestParams)
       if (code !== 'build.accepted') {
         bail(new Error('Please, update your builder-hub to the latest version!'))
       }
@@ -302,7 +306,8 @@ const performInitialLink = async (appId: string, builder: Builder, extraData : {
 
 export default async (options) => {
   await validateAppAction('link')
-  const unsafe = !!(options.unsafe || options.u)
+  const unsafe = !!(options.u || options.unsafe)
+  const workspace = options.w || options.workspace
   const manifest = await getManifest()
   const builderHubMessage = await checkBuilderHubMessage('link')
   if (!isEmpty(builderHubMessage)) {
@@ -315,7 +320,7 @@ export default async (options) => {
   }
 
   const appId = toAppLocator(manifest)
-  const context = { account: getAccount(), workspace: getWorkspace(), environment: getEnvironment() }
+  const context = { account: getAccount(), workspace: workspace || getWorkspace(), environment: getEnvironment() }
   if (options.install || options.i) {
     await getTypings(manifest, context.account, context.workspace)
   }

@@ -132,6 +132,12 @@ export default {
         short: 'u',
         type: 'boolean',
       },
+      {
+        description: 'Specify the workspace for the app registry',
+        long: 'workspace',
+        short: 'w',
+        type: 'string',
+      },
     ],
   },
   list: {
